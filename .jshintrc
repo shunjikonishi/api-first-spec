@@ -20,5 +20,10 @@
   "maxlen": 100,
   "devel": true,
   "node": true,
-  "mocha": true
+  "mocha": true,
+  "predef": [
+    "Method",
+    "ContentType",
+    "DataType"
+  ]
 }
