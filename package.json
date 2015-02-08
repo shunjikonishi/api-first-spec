@@ -1,0 +1,32 @@
+{
+  "name": "api-first-spec",
+  "version": "0.0.0",
+  "description": "Describe API specification as a test\"",
+  "main": "./lib/api-first-spec.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shunjikonishi/api-first-spec.git"
+  },
+  "keywords": [
+    "api-first",
+    "test"
+  ],
+  "author": "Shunji Konishi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shunjikonishi/api-first-spec/issues"
+  },
+  "homepage": "https://github.com/shunjikonishi/api-first-spec",
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "extend": "^2.0.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "load-grunt-tasks": "^3.1.0",
+    "time-grunt": "^1.0.0"
+  }
+}
