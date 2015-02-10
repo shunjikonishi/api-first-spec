@@ -21,9 +21,10 @@ var API = spec.define({
       "password": {
         "type": DataType.STRING,
         "rules": {
-          "required": true
+          "requiredx": true
         }
-      }
+      },
+      "remember_me": DataType.BIT
     }
   },
   "response": {
