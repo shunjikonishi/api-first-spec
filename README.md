@@ -17,3 +17,10 @@ Not yet.
 
 ## Sample
 - [login](test/login.spec.js)
+
+## ToDo
+- Support automatically badRequest test.
+- Support neted data.
+- Support upload(multipart/form-data) and download(e.g. application/pdf).
+- Support authenticated API.
+- Setup test server on Heroku.
