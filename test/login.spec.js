@@ -46,8 +46,7 @@ describe("login", function() {
     host.api(API).params({
       "email": "test@test.com",
       "password": "password"
-    }).test(function(data, res) {
-      assert.equal(res.statusCode, 200);
+    }).success(function(data, res) {
       assert.equal(data.code, 500);
       done();
     });
@@ -56,8 +55,7 @@ describe("login", function() {
     host.api(API).params({
       "email": "konishi-test3@test.com",
       "password": "PASSWORD"
-    }).test(function(data, res) {
-      assert.equal(res.statusCode, 200);
+    }).success(function(data, res) {
       assert.equal(data.code, 500);
       done();
     });
@@ -66,8 +64,7 @@ describe("login", function() {
     host.api(API).params({
       "email": "konishi-test3@test.com",
       "password": "password"
-    }).test(function(data, res) {
-      assert.equal(res.statusCode, 200);
+    }).success(function(data, res) {
       assert.equal(data.code, 200);
       done();
     });

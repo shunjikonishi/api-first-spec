@@ -22,8 +22,5 @@
   "node": true,
   "mocha": true,
   "predef": [
-    "Method",
-    "ContentType",
-    "DataType"
   ]
 }
