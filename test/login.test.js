@@ -4,34 +4,38 @@ var
   spec = require("../lib/api-first-spec"),
   props = require("./env/properties.json");
 
-spec.defineGlobals();
-
 var API = spec.define({
   "endpoint": "/api/companies/signin",
   "method": "POST",
   "request": {
-    "contentType": ContentType.URLENCODED,
+    "contentType": spec.ContentType.URLENCODED,
     "params": {
+      "email": "string",
+      "password": "string",
+      "remember_me": "bit"
+    },
+    "rules": {
       "email": {
-        "type": DataType.STRING,
-        "rules": {
-          "required": true
-        }
+        "required": true
       },
       "password": {
-        "type": DataType.STRING,
-        "rules": {
-          "requiredx": true
-        }
-      },
-      "remember_me": DataType.BIT
+        "required": true
+      }
     }
   },
   "response": {
-    "contentType": ContentType.JSON,
+    "contentType": spec.ContentType.JSON,
     "data": {
-      "code": DataType.STRING,
-      "message": DataType.STRING
+      "code": "int",
+      "message": "string"
+    },
+    "rules": {
+      "code": {
+        "required": true
+      },
+      "message": {
+        "required": true
+      }
     }
   }
 });
