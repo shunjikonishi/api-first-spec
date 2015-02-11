@@ -1,8 +1,7 @@
 "use strict";
 var 
   assert = require("chai").assert,
-  spec = require("../lib/api-first-spec"),
-  props = require("./env/properties.json");
+  spec = require("../lib/api-first-spec");
 
 var API = spec.define({
   "endpoint": "/api/companies/signin",
@@ -39,47 +38,35 @@ var API = spec.define({
     }
   }
 });
-console.log(API);
 
 describe("login", function() {
-  var client = spec.createHttpClient(props.host);
+  var host = spec.host("localhost:8888");
+
   it("Wrong username", function(done) {
-    client.request({
-      "method": "POST",
-      "path": "/api/companies/signin",
-      "data": {
-        "email": "not_exists@test.com",
-        "password": "password"
-      }
-    }, function(data, res) {
+    host.api(API).params({
+      "email": "test@test.com",
+      "password": "password"
+    }).test(function(data, res) {
       assert.equal(res.statusCode, 200);
       assert.equal(data.code, 500);
       done();
     });
   });
   it("Wrong password", function(done) {
-    client.request({
-      "path": "/api/companies/signin",
-      "method": "POST",
-      "data": {
-        "email": "konishi-test3@test.com",
-        "password": "PASSWORD"
-      }
-    }, function(data, res) {
+    host.api(API).params({
+      "email": "konishi-test3@test.com",
+      "password": "PASSWORD"
+    }).test(function(data, res) {
       assert.equal(res.statusCode, 200);
       assert.equal(data.code, 500);
       done();
     });
   });
   it("Correct login", function(done) {
-    client.request({
-      "path": "/api/companies/signin",
-      "method": "POST",
-      "data": {
-        "email": "konishi-test3@test.com",
-        "password": "password"
-      }
-    }, function(data, res) {
+    host.api(API).params({
+      "email": "konishi-test3@test.com",
+      "password": "password"
+    }).test(function(data, res) {
       assert.equal(res.statusCode, 200);
       assert.equal(data.code, 200);
       done();
