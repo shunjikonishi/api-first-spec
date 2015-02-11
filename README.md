@@ -12,4 +12,8 @@ It allows you to describe API specification as a test.
 - npm
 - mocha
 
+## Usage
+Not yet.
 
+## Sample
+- [login](test/login.spec.js)
