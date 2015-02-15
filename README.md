@@ -17,7 +17,21 @@ It allows you to describe API specification as a test.
 This API spec is one of Mocha test.
 So you can validate it with Mocha.
 
-```javascript
+``` javascript
+var spec = require("api-first-spec");
+
+var API = spec.define({ ... });
+```
+
+#### Config reference of define method.
+##### endpoint
+Required.
+
+Path of API.  
+If you want to use parameter in path, you can use parameter name with [].
+
+``` javascript
+"endpoint": "/item/[itemId]/detail"
 ```
 
 ## Make some test.
