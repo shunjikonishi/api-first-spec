@@ -39,6 +39,7 @@ var API = spec.define({
   }
 });
 
+/*
 describe("login", function() {
   var host = spec.host("localhost:8888");
 
@@ -70,3 +71,4 @@ describe("login", function() {
     });
   });
 });
+*/

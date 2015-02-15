@@ -13,7 +13,14 @@ It allows you to describe API specification as a test.
 - mocha
 
 ## Usage
-Not yet.
+### Describe API spec.
+This API spec is one of Mocha test.
+So you can validate it with Mocha.
+
+```javascript
+```
+
+## Make some test.
 
 ## Sample
 - [login](test/login.spec.js)
