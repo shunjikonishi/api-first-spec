@@ -70,3 +70,5 @@ describe("login", function() {
     });
   });
 });
+
+module.exports = API;
