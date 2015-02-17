@@ -17,13 +17,16 @@ It allows you to describe API specification as a test.
 
 ## Usage
 ### Describe API spec.
-This API spec is one of Mocha test.
+This API spec is one of Mocha test.  
 So you can validate it with Mocha.
 
 ``` javascript
 var spec = require("api-first-spec");
 
 var API = spec.define({ ... });
+
+//If you want, you can export API as a module
+//module.exports = API;
 ```
 
 #### Config reference of define method.
@@ -100,7 +103,7 @@ Describe response specification.
 ##### response.contentType
 Option.
 
-Content-Type header of response.
+Content-Type header of response.  
 If omitted, its default value is "application/json".
 
 ##### response.data
@@ -113,7 +116,7 @@ See parameters section.
 ##### response.rules
 Option.
 
-Describe validation rules of response parameters.
+Describe validation rules of response data.
 
 See rules section.
 
@@ -151,7 +154,6 @@ Define parameters as is.
         id: "int",
         name: "string"
       }
-    }
     }]
   }
 ```
@@ -197,7 +199,7 @@ You can define validation rules to each parameters.
   }
 ```
 
-If the corresponde parameter is in deep object, you can specify its name by dot separated name.  
+If the correspond parameter is in deep object, you can specify its name by dot separated name.  
 Or single name applied to each parameters.  
 
 In above example, "id" rule is applied to "list.id" and "list.company.id".
@@ -214,12 +216,13 @@ Supported rules are follows.
 - pattern
 - email
 - url
+- format
 
 ## Make tests
 You can make tests for [mocha](http://mochajs.org/) with this API spec.
 
 ### Basic usage
-```
+``` javascript
 var 
   spec = require("api-first-spec"),
   assert = require("chai").assert;
@@ -258,7 +261,7 @@ The points of above are follows.
 When you use success method, the validations that defined in response.rules are applied to all response data.
 
 ### Test with invalid parameters.
-```
+``` javascript
 describe("Invalid parameters.", function() {
   var host;
   before(function() {
@@ -276,7 +279,7 @@ describe("Invalid parameters.", function() {
 
 By default, following function is used to judge badRequest.
 
-```
+``` javascript
 function isBadRequest(data, res) {
   return res.statusCode === 400;
 }
@@ -287,7 +290,7 @@ You can override this function in API spec.
 ### Test with login
 You can export API as a module. And reuse it in other test.
 
-```
+``` javascript
 var 
   spec = require("api-first-spec"),
   assert = require("chai").assert,
@@ -304,7 +307,7 @@ describe("Auth test", function() {
     host = spec.host("localhost:9000");
   });
 
-  it("can't use without login", function(done) {
+  it("can't call without login", function(done) {
     host.api(API).params({
       p1: "aaa",
       p2: "bbb"
@@ -322,7 +325,7 @@ describe("Some test", function() {
     //It is same as spec.host(...).api(LoginAPI).params(...).success()
   });
 
-  it("should succeed", function(done) {
+  it("success", function(done) {
     host.api(API).params({
       p1: "aaa",
       p2: "bbb"
