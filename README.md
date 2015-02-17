@@ -12,6 +12,11 @@ It allows you to describe API specification as a test.
 - npm
 - mocha
 
+## Install
+``` bash
+npm install api-first-spec
+```
+
 ## Sample
 - [login](test/login.spec.js)
 
