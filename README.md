@@ -240,13 +240,12 @@ describe("Some test", function() {
     host = spec.host("localhost:9000");
   });
 
-  it("success", function(done) {
+  it("success", function() {
     host.api(API).params({
       email: "test@test.com",
       password: "password"
     }).success(function(data, res) {
       assert.equal(200, data.code);
-      done();
     });
   });
 });
@@ -255,13 +254,14 @@ describe("Some test", function() {
 The points of above are follows.
 
 - Specify target host by spec#host method.
-- Specify test API by host#api method. It returns host itself.
-- Specify request parameters by host#params method. It returns host itself.
+- Specify test API by host#api method. It returns new host instance.
+- Specify request parameters by host#params method. It returns new host instance.
 - Call host#success or other test method to execute request.
   - Its argument is a callback function.
   - Callback function takes 2 arguments. data(JSON) and response.
-  - You must call done() in callback function.
-  - Or you can directly set done as callback function.
+
+If you want to wait finishing test, you can call done() method in callback function.
+Or you can directly set done as a callback function.
 
 When you use success method, the validations that defined in response.rules are applied to all response data.
 
@@ -273,11 +273,11 @@ describe("Invalid parameters.", function() {
     host = spec.host("localhost:9000");
   });
 
-  it("sholud has email", function(done) {
+  it("sholud has email", function() {
     host.api(API).params({
       email: null,
       password: "password"
-    }).badRequest(done);
+    }).badRequest();
   });
 });
 ```
@@ -327,7 +327,7 @@ describe("Some test", function() {
       email: "test@test.com",
       password: "password"
     }).success(done);
-    //It is same as spec.host(...).api(LoginAPI).params(...).success()
+    //It is same as spec.host(...).api(LoginAPI).params(...).success(done)
   });
 
   it("success", function(done) {
@@ -340,6 +340,12 @@ describe("Some test", function() {
 
 ```
 
+The important things are
+
+- You must call login method in before or beforeEach method.
+- You must pass the done function to success callback.
+
+Otherwise each tests might execute without login.
 
 ## ToDo
 - Support dynamic rules.(e.g. required with some condition.)
