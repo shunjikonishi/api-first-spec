@@ -42,31 +42,28 @@ var API = spec.define({
 describe("login", function() {
   var host = spec.host("localhost:8888");
 
-  it("Wrong username", function(done) {
+  it("Wrong username", function() {
     host.api(API).params({
       "email": "test@test.com",
       "password": "password"
     }).success(function(data, res) {
       assert.equal(data.code, 500);
-      done();
     });
   });
-  it("Wrong password", function(done) {
+  it("Wrong password", function() {
     host.api(API).params({
       "email": "konishi-test3@test.com",
       "password": "PASSWORD"
     }).success(function(data, res) {
       assert.equal(data.code, 500);
-      done();
     });
   });
-  it("Correct login", function(done) {
+  it("Correct login", function() {
     host.api(API).params({
       "email": "konishi-test3@test.com",
       "password": "password"
     }).success(function(data, res) {
       assert.equal(data.code, 200);
-      done();
     });
   });
 });
