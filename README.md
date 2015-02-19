@@ -209,7 +209,7 @@ Or single name applied to each parameters.
 
 In above example, "id" rule is applied to "list.id" and "list.company.id".
 
-When you use dot separate name, it must start with top level name.
+You can alse use wildcard. (e.g. '*', 'seminars.*')
 
 Supported rules are follows.
 
@@ -240,12 +240,13 @@ describe("Some test", function() {
     host = spec.host("localhost:9000");
   });
 
-  it("success", function() {
+  it("success", function(done) {
     host.api(API).params({
       email: "test@test.com",
       password: "password"
     }).success(function(data, res) {
       assert.equal(200, data.code);
+      done();
     });
   });
 });
@@ -259,9 +260,7 @@ The points of above are follows.
 - Call host#success or other test method to execute request.
   - Its argument is a callback function.
   - Callback function takes 2 arguments. data(JSON) and response.
-
-If you want to wait finishing test, you can call done() method in callback function.
-Or you can directly set done as a callback function.
+  - Or you can directly set done as a callback function.
 
 When you use success method, the validations that defined in response.rules are applied to all response data.
 
@@ -273,11 +272,11 @@ describe("Invalid parameters.", function() {
     host = spec.host("localhost:9000");
   });
 
-  it("sholud has email", function() {
+  it("sholud has email", function(done) {
     host.api(API).params({
       email: null,
       password: "password"
-    }).badRequest();
+    }).badRequest(done);
   });
 });
 ```
