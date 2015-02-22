@@ -1,10 +1,11 @@
 "use strict";
 var 
   assert = require("chai").assert,
-  spec = require("../lib/api-first-spec");
+  spec = require("../lib/api-first-spec"),
+  config = require("./config/config.js");
 
 var API = spec.define({
-  "endpoint": "/api/companies/signin",
+  "endpoint": "/auth/signin",
   "method": "POST",
   "request": {
     "contentType": spec.ContentType.URLENCODED,
@@ -40,11 +41,11 @@ var API = spec.define({
 });
 
 describe("login", function() {
-  var host = spec.host("localhost:8888");
+  var host = spec.host(config.host);
 
   it("Wrong username", function(done) {
     host.api(API).params({
-      "email": "test@test.com",
+      "email": "wrong@test.com",
       "password": "password"
     }).success(function(data, res) {
       assert.equal(data.code, 500);
@@ -53,7 +54,7 @@ describe("login", function() {
   });
   it("Wrong password", function(done) {
     host.api(API).params({
-      "email": "konishi-test3@test.com",
+      "email": "test@test.com",
       "password": "PASSWORD"
     }).success(function(data, res) {
       assert.equal(data.code, 500);
@@ -62,7 +63,7 @@ describe("login", function() {
   });
   it("Correct login", function(done) {
     host.api(API).params({
-      "email": "konishi-test3@test.com",
+      "email": "test@test.com",
       "password": "password"
     }).success(function(data, res) {
       assert.equal(data.code, 200);
