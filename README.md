@@ -159,7 +159,8 @@ Define parameters as is.
         id: "int",
         name: "string"
       }
-    }]
+    }],
+    errors: ["string"]
   }
 ```
 
@@ -200,6 +201,11 @@ You can define validation rules to each parameters.
     "list.created_at": {
       required: true,
       format: "YYYY-MM-DD"
+    },
+    "errors": {
+      required: function(data) {
+        return data.code !== 200;
+      }
     }
   }
 ```
@@ -222,6 +228,18 @@ Supported rules are follows.
 - email
 - url
 - format
+
+If you want to use dynamic rule.(e.g. required if the code field value != 200)
+
+```
+    "errors": {
+      required: function(data, reqData) {
+        return data.code !== 200;
+      }
+    }
+```
+
+It takes two arguments. response data and request data.
 
 ## Make tests
 You can make tests for [mocha](http://mochajs.org/) with this API spec.
