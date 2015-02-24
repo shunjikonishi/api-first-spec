@@ -70,6 +70,17 @@ describe("login", function() {
       done();
     });
   });
+  it("Use function", function(done) {
+    host.api(API).params({
+      "email": function(data) {
+        return "test" + (new Date().getTime()) + "@test.com";
+      },
+      "password": "password"
+    }).success(function(data, res) {
+      assert.equal(data.code, 500);
+      done();
+    });
+  });
 });
 
 module.exports = API;
