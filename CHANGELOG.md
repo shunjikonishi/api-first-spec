@@ -9,3 +9,11 @@
 - Bugfix
   - Allow content-type with charset
 - Support dynamic rules
+
+## 0.1.7(2015-02-27)
+- BugFix
+  - Allow null and undefined in pattern rule
+- Add SKIP_TEST option
+- Add VERBOSE option
+- Add requiredAllowEmptyString rule
+- Support function in request params
