@@ -17,3 +17,7 @@
 - Add VERBOSE option
 - Add requiredAllowEmptyString rule
 - Support function in request params
+
+## 0.1.8(2015-04-23)
+- Bugfix
+  - date and datetime type doesn't work, if its format isn't default.
