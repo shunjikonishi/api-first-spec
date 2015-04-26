@@ -21,3 +21,7 @@
 ## 0.1.8(2015-04-23)
 - Bugfix
   - date and datetime type doesn't work, if its format isn't default.
+
+## 0.2.0(2015-04-27)
+- Add badRequestAll method
+- Add verbose log

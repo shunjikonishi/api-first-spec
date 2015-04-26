@@ -301,7 +301,15 @@ describe("Invalid parameters.", function() {
     host = spec.host("localhost:9000");
   });
 
-  it("sholud has email", function(done) {
+  //Validate all rules
+  host.api(API).params({
+    email: "test@test.com",
+    password: "password"
+  }).badRequestAll(
+    "email": ["dot..dot@test.com", "invalid_email"]
+  );
+
+  it("individual badRequest test", function(done) {
     host.api(API).params({
       email: null,
       password: "password"
@@ -309,6 +317,10 @@ describe("Invalid parameters.", function() {
   });
 });
 ```
+
+badRequestAll method validate almost all rules.(except pattern.)
+To use this method, you have to set valid parameters with params method.
+badRequest all generate the request which one of them is replaced with invalid parameter.
 
 By default, following function is used to judge badRequest.
 
@@ -376,9 +388,7 @@ The important things are
 Otherwise each tests might execute without login.
 
 ## ToDo
-- Support dynamic rules.(e.g. required with some condition.)
 - Support basic authentication
 - Support http headers validation
-- Support automatically badRequest test.
 - Support upload(multipart/form-data) and download(e.g. application/pdf).
 - Setup test server on Heroku.
