@@ -17,6 +17,17 @@ It allows you to describe API specification as a test.
 npm install api-first-spec
 ```
 
+## Run test
+``` bash
+mocha your_test.spec.js
+```
+
+If you want to see communication detail, run with environment variables API_FIRST_SPEC_VERBOSE
+
+``` bash
+env API_FIRST_SPEC_VERBOSE=true mocha your_test.spec.js
+```
+
 ## Sample
 - [login](test/login.spec.js)
 
