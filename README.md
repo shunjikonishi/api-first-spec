@@ -294,6 +294,7 @@ The points of above are follows.
 When you use success method, the validations that defined in response.rules are applied to all response data.
 
 ### Test with invalid parameters.
+
 ``` javascript
 describe("Invalid parameters.", function() {
   var host;
@@ -301,13 +302,12 @@ describe("Invalid parameters.", function() {
     host = spec.host("localhost:9000");
   });
 
-  //Validate all rules
   host.api(API).params({
     email: "test@test.com",
     password: "password"
-  }).badRequestAll(
+  }).badRequestAll({
     "email": ["dot..dot@test.com", "invalid_email"]
-  );
+  });
 
   it("individual badRequest test", function(done) {
     host.api(API).params({
@@ -321,6 +321,11 @@ describe("Invalid parameters.", function() {
 badRequestAll method validate almost all rules.(except pattern.)
 To use this method, you have to set valid parameters with params method.
 badRequest all generate the request which one of them is replaced with invalid parameter.
+
+Optionally badRequestAll takes two parameters.
+
+- 1. runDefaults. Run default tests or not. 
+- 2. optionParameters. Values you want to replace from specified params.
 
 By default, following function is used to judge badRequest.
 
