@@ -26,5 +26,6 @@
 - Add badRequestAll method
 - Add verbose log
 
-## 0.2.2(2015-05-27)
+## 0.2.3(2015-05-27)
 - Bugfix of embeded parameter in endpoint.
+- Bugfix of cookie handling
