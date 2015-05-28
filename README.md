@@ -353,10 +353,7 @@ var API = spec.define({
 });
 
 describe("Auth test", function() {
-  var host;
-  before(function() {
-    host = spec.host("localhost:9000");
-  });
+  var host = spec.host("localhost:9000");
 
   it("can't call without login", function(done) {
     host.api(API).params({
@@ -367,13 +364,13 @@ describe("Auth test", function() {
 });
 
 describe("Some test", function() {
-  var host;
+  var host = spec.host("localhost:9000");
   before(function(done) {
-    host = spec.host("localhost:9000").api(API).login({
+    host.api(API).login({
       email: "test@test.com",
       password: "password"
     }).success(done);
-    //It is same as spec.host(...).api(LoginAPI).params(...).success(done)
+    //It is same as host.api(LoginAPI).params(...).success(done)
   });
 
   it("success", function(done) {

@@ -30,6 +30,7 @@
 - Bugfix of embeded parameter in endpoint.
 - Bugfix of cookie handling
 
-## 0.2.4(2015-05-28)
+## 0.2.5(2015-05-28)
 - Add list rule
+- Mod login handling
 
