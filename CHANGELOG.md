@@ -33,4 +33,5 @@
 ## 0.2.5(2015-05-28)
 - Add list rule
 - Mod login handling
+- Mod some error message
 
