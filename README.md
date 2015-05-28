@@ -239,6 +239,7 @@ Supported rules are follows.
 - email
 - url
 - format
+- list
 
 If you want to use dynamic rule.(e.g. required if the code field value != 200)
 
