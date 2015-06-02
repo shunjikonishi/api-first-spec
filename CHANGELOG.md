@@ -35,3 +35,5 @@
 - Mod login handling
 - Mod some error message
 
+## 0.2.6(2015-06-02)
+- Bugfix: When the field value is object, datatype check was not correct.
