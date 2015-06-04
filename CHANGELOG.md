@@ -37,3 +37,6 @@
 
 ## 0.2.6(2015-06-02)
 - Bugfix: When the field value is object, datatype check was not correct.
+
+## 0.2.7(2015-06-04)
+- Add DataType: any

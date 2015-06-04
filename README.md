@@ -184,6 +184,7 @@ Supported data types are follows.
 - date
 - datetime
 - bit(0 or 1)
+- any
 
 If the data type is date or datetime, you can specify its format in rules section.
 
