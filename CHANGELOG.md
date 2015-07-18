@@ -43,3 +43,8 @@
 
 ## 0.2.8(2015-07-02)
 - Mod debug log
+
+## 0.2.9(2015-07-18)
+- Add httpClient#headers method
+- Bugfix of 204 NoContent handling
+ 
