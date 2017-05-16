@@ -51,3 +51,6 @@
 ## 0.2.12(2017-05-16)
 - Add default headers/params support
 - Some bugfix
+
+## 0.2.13(2017-05-16)
+- Support headers definition in request.
