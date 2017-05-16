@@ -47,4 +47,7 @@
 ## 0.2.9(2015-07-18)
 - Add httpClient#headers method
 - Bugfix of 204 NoContent handling
- 
+
+## 0.2.12(2017-05-16)
+- Add default headers/params support
+- Some bugfix
