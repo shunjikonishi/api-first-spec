@@ -1,6 +1,6 @@
 {
   "name": "api-first-spec",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "description": "Describe API specification as a test",
   "main": "./lib/api-first-spec.js",
   "scripts": {

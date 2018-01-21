@@ -141,7 +141,7 @@ Option.
 
 If true, the response json can't have the key doesn't defined in response.data.
 
-##### isSuccess, isBadRequest, isNotFound, isUnauthorized, isClientError
+##### isSuccess, isBadRequest, isNotFound, isUnauthorized, isForbidden, isClientError
 Option.
 
 The methods corresponding to test methods.  
