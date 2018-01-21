@@ -55,8 +55,9 @@
 ## 0.2.13(2017-05-16)
 - Support headers definition in request.
 
-## 0.3.0(2018-01-xx)
+## 0.2.14(2018-01-21)
 - Promisify request methodd
 - Mod error messages
 - Bugfix of content-length of non-ascii body
 - Add forbidden method
+- Add embedded rules in type.
