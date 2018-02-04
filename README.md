@@ -390,9 +390,3 @@ The important things are
 - You must pass the done function to success callback.
 
 Otherwise each tests might execute without login.
-
-## ToDo
-- Support basic authentication
-- Support http headers validation
-- Support upload(multipart/form-data) and download(e.g. application/pdf).
-- Setup test server on Heroku.

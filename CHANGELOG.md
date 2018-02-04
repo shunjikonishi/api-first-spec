@@ -61,3 +61,7 @@
 - Bugfix of content-length of non-ascii body
 - Add forbidden method
 - Add embedded rules in type.
+
+## 1.0.0(2018-02-05)
+- Bugfix of cookie handling
+- Support mutlipart/form-data test
