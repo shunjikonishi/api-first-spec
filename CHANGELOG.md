@@ -65,3 +65,6 @@
 ## 1.0.0(2018-02-05)
 - Bugfix of cookie handling
 - Support mutlipart/form-data test
+
+## 1.0.1(2018-03-27)
+- Bugfix of array handling in mutlipart/form-data
