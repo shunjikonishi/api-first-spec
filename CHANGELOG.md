@@ -66,5 +66,6 @@
 - Bugfix of cookie handling
 - Support mutlipart/form-data test
 
-## 1.0.1(2018-03-27)
+## 1.0.2(2018-03-27)
 - Bugfix of array handling in mutlipart/form-data
+- Add text/csv to ContentType
