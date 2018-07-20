@@ -1,4 +1,5 @@
 {
+  "esversion": 6,
   "bitwise": true,
   "camelcase": true,
   "curly": false,
@@ -17,7 +18,7 @@
   "strict": true,
   "trailing": true,
   "maxdepth": 5,
-  "maxlen": 100,
+  "maxlen": 150,
   "devel": true,
   "node": true,
   "mocha": true,
