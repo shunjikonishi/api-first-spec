@@ -1,6 +1,4 @@
-"use strict";
-
-var DataType = {
+export const DataType: { [key: string]: string } = {
   ANY: "any",
   STRING: "string",
   INT: "int",
@@ -12,5 +10,3 @@ var DataType = {
   DATETIME: "datetime",
   BIT: "bit"
 };
-
-module.exports = DataType;

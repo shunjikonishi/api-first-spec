@@ -1,10 +1,31 @@
 {
   "name": "api-first-spec",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Describe API specification as a test",
-  "main": "./lib/api-first-spec.js",
+  "main": "./dist/api-first-spec.js",
   "scripts": {
-    "test": "mocha"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "tslint -p . || exit 1",
+    "compile": "tsc -p . || exit 1",
+    "watch": "npm-watch"
+  },
+  "watch": {
+    "lint": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "ts",
+      "legacyWatch": true,
+      "quiet": false
+    },
+    "compile": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "ts",
+      "legacyWatch": true,
+      "quiet": false
+    }
   },
   "repository": {
     "type": "git",
@@ -21,21 +42,20 @@
   },
   "homepage": "https://github.com/shunjikonishi/api-first-spec",
   "devDependencies": {
-    "grunt": "^1.0.3",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-watch": "^1.1.0",
-    "load-grunt-tasks": "^4.0.0",
+    "chai": "^4.1.2",
     "mocha": "^5.2.0",
-    "pg": "^7.4.3",
-    "sql-fixtures": "^1.0.0",
-    "time-grunt": "^1.4.0"
+    "npm-watch": "^0.3.0"
   },
   "dependencies": {
-    "chai": "^4.1.2",
+    "@types/node": "^10.5.2",
+    "@types/request": "^2.47.1",
+    "@types/validator": "^9.4.1",
+    "email-validator": "^2.0.4",
     "extend": "^3.0.2",
-    "jshint": "^2.9.5",
     "moment": "^2.22.2",
-    "object-path": "^0.11.4",
-    "request": "^2.87.0"
+    "request": "^2.87.0",
+    "tslint": "^5.11.0",
+    "typescript": "^2.9.2",
+    "validator": "^10.4.0"
   }
 }
