@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const api_1 = require("./api");
 const datatype_1 = require("./datatype");
 const httpClient_1 = require("./httpClient");
@@ -23,6 +22,7 @@ class ApiFirstSpec {
                 api.test();
             }
         }
+        return api;
     }
     host(hostName, ssl, defaults) {
         return new httpClient_1.HttpClient(hostName, ssl, defaults);
@@ -55,4 +55,4 @@ class ApiFirstSpec {
         return api_1.Method;
     }
 }
-exports.default = new ApiFirstSpec();
+module.exports = new ApiFirstSpec();

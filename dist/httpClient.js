@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const querystring_1 = __importDefault(require("querystring"));
-const request_1 = __importDefault(require("request"));
+const Request = require("request");
 /**
  * Wrapper of http/https library.
  *
@@ -20,11 +20,11 @@ class HttpClient {
         this.host = host;
         this.ssl = ssl;
         this.defaults = defaults;
-        this.api = null;
-        this.params = null;
-        this.headers = null;
-        this.cookieJar = request_1.default.jar();
-        this.request = request_1.default.defaults({ jar: this.cookieJar });
+        this._api = null;
+        this._params = null;
+        this._headers = null;
+        this.cookieJar = Request.jar();
+        this.request = Request.defaults({ jar: this.cookieJar });
         if (!defaults.headers) {
             defaults.headers = {};
         }
@@ -32,66 +32,66 @@ class HttpClient {
             defaults.params = {};
         }
     }
-    withAPI(v) {
-        this.api = v;
+    api(v) {
+        this._api = v;
         return this;
     }
-    withParams(v) {
-        this.params = v;
+    params(v) {
+        this._params = v;
         return this;
     }
-    withHeaders(v) {
-        this.headers = v;
+    headers(v) {
+        this._headers = v;
         return this;
     }
     success(callback) {
         return this.doTest(result => {
-            if (!this.api.isSuccess(result.data, result.res)) {
+            if (!this._api.isSuccess(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Success.\n${this.stringify(result.data)}`);
             }
-            this.api.validateResponse(result.data, result.res, result.params);
+            this._api.validateResponse(result.data, result.res, result.params);
             this.done(callback, result);
-        });
+        }).then(result => result.data);
     }
     badRequest(callback) {
         return this.doTest(result => {
-            if (!this.api.isBadRequest(result.data, result.res)) {
+            if (!this._api.isBadRequest(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't BadRequest.\n${this.stringify(result.data)}`);
             }
             this.done(callback, result);
-        });
+        }).then(result => result.data);
     }
     notFound(callback) {
         return this.doTest(result => {
-            if (!this.api.isNotFound(result.data, result.res)) {
+            if (!this._api.isNotFound(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't NotFound.\n${this.stringify(result.data)}`);
             }
             this.done(callback, result);
-        });
+        }).then(result => result.data);
     }
     unauthorized(callback) {
         return this.doTest(result => {
-            if (!this.api.isUnauthorized(result.data, result.res)) {
+            if (!this._api.isUnauthorized(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Unauthorized.\n${this.stringify(result.data)}`);
             }
             this.done(callback, result);
-        });
+        }).then(result => result.data);
     }
     forbidden(callback) {
         return this.doTest(result => {
-            if (!this.api.isForbidden(result.data, result.res)) {
+            if (!this._api.isForbidden(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Forbidden.\n${this.stringify(result.data)}`);
             }
             this.done(callback, result);
-        });
+        }).then(result => result.data);
     }
     clientError(callback) {
         return this.doTest(result => {
-            if (!this.api.isClientError(result.data, result.res)) {
+            if (!this._api.isClientError(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't ClientError.\n${this.stringify(result.data)}`);
             }
             this.done(callback, result);
-        });
+        }).then(result => result.data);
     }
     normalizeData(params) {
         function getValue(v) {
@@ -197,18 +197,24 @@ class HttpClient {
                     console.log("data = ");
                     console.log(ret.data);
                 }
-                if (callback) {
-                    callback(ret);
+                if (!callback) {
+                    resolve(ret);
+                    return;
                 }
+                const ct = ret.res.headers["content-type"];
+                if (isJson(ct)) {
+                    ret.data = JSON.parse(ret.data);
+                }
+                callback(ret);
                 resolve(ret);
             }
-            const currentApi = self.api;
-            const currentParams = Object.assign({}, self.defaults.params, self.params);
-            const currentHeaders = Object.assign({}, self.defaults.headers, self.headers);
-            self.params = null;
-            self.headers = null;
+            const currentApi = self._api;
+            const currentParams = Object.assign({}, self.defaults.params, self._params);
+            const currentHeaders = Object.assign({}, self.defaults.headers, self._headers);
+            self._params = null;
+            self._headers = null;
             if (!currentApi) {
-                throw new Error("api isn't set.");
+                reject("api isn't set.");
             }
             const requestParams = {
                 method: currentApi.method,
@@ -268,7 +274,7 @@ class HttpClient {
                 console.log(JSON.stringify(config.data));
             }
         }
-        const req = request_1.default(requestOptions, (error, res, body) => {
+        const req = this.request(requestOptions, (error, res, body) => {
             if (error) {
                 console.log("!!!!! error !!!!!", error, res, body);
                 return;
@@ -284,15 +290,15 @@ class HttpClient {
     }
     copy() {
         const ret = new HttpClient(this.host, this.ssl, this.defaults);
-        ret.assign(this.cookieJar, this.api, this.params, this.headers);
+        ret.assign(this.cookieJar, this._api, this._params, this._headers);
         return ret;
     }
     assign(cookieJar, api, params, headers) {
         this.cookieJar = cookieJar;
-        this.api = api;
-        this.params = params;
-        this.headers = headers;
-        this.request = request_1.default.defaults({ jar: cookieJar });
+        this._api = api;
+        this._params = params;
+        this._headers = headers;
+        this.request = this.request.defaults({ jar: cookieJar });
     }
 }
 exports.HttpClient = HttpClient;

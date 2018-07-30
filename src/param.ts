@@ -103,8 +103,8 @@ export class Param implements IParam {
     if (value && this.isArray) {
       if (!Array.isArray(value)) {
         throw new Error(this.fullname() + " must be array.");
-        target = value;
       }
+      target = value;
     }
     target.forEach(obj => {
       let dataNames: Array<string> = null;
@@ -196,7 +196,7 @@ export class Param implements IParam {
   }
 
   private fullname() {
-    return this.prefix ? this.prefix + name : name;
+    return this.prefix ? this.prefix + this.name : this.name;
   }
 
   private init(value: any) {

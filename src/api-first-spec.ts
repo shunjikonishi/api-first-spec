@@ -23,6 +23,7 @@ class ApiFirstSpec {
         api.test();
       }
     }
+    return api;
   }
 
   public host(hostName: string, ssl: boolean, defaults: IDefaultParameters) {
@@ -60,4 +61,4 @@ class ApiFirstSpec {
   }
 }
 
-export default new ApiFirstSpec();
+export = new ApiFirstSpec();

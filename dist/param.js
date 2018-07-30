@@ -86,8 +86,8 @@ class Param {
         if (value && this.isArray) {
             if (!Array.isArray(value)) {
                 throw new Error(this.fullname() + " must be array.");
-                target = value;
             }
+            target = value;
         }
         target.forEach(obj => {
             let dataNames = null;
@@ -172,7 +172,7 @@ class Param {
         return false;
     }
     fullname() {
-        return this.prefix ? this.prefix + name : name;
+        return this.prefix ? this.prefix + this.name : this.name;
     }
     init(value) {
         if (typeof (value) === "string") {
