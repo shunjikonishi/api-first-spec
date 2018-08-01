@@ -1,0 +1,41 @@
+{
+  "extends": ["tslint:latest"],
+  "rules": {
+    "array-type": [true, "generic"],
+    "arrow-parens": ["error", "as-needed"],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-module",
+      "check-separator",
+      "check-type"
+    ],
+    "typedef-whitespace": [
+      true,
+      {
+        "variable-decrlaration": "space"
+      }
+    ],
+    "curly": [true, "ignore-same-line"],
+    "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"],
+    "only-arrow-functions": false,
+    "import-spacing": false,
+    "semicolon": [true, "always", "ignore-interfaces"],
+    "no-angle-bracket-type-assertion": false,
+    "no-bitwise": false,
+    "no-trailing-whitespace": false,
+    "object-literal-key-quotes": [true, "as-needed"],
+    "object-literal-sort-keys": false,
+    "max-classes-per-file": false,
+    "callable-types": false,
+    "no-this-assignment": false,
+    "no-empty-interface": false,
+    "ordered-imports": false,
+    "trailing-comma": false,
+    "prefer-conditional-expression": false,
+    "prefer-object-spread": false,
+    "max-line-length": [true, 256]
+  }
+}
