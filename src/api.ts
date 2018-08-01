@@ -182,7 +182,13 @@ export class API {
 
   public testCoverage() {
     if (this.request && this.request.params && this.request.params.coverage() !== 1) {
-      throw new Error(`Request parameter ${this.request.params.uncoveredParamNames()} are not covered.`);
+      throw new Error(`Request parameter [${this.request.params.uncoveredParamNames()}] are not covered.`);
+    }
+  }
+
+  public clearCoverage() {
+    if (this.request && this.request.params) {
+      this.request.params.clearCoverage();
     }
   }
 
