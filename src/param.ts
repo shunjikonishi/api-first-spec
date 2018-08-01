@@ -22,6 +22,8 @@ export interface IParam {
   name: string;
   type: string;
   isArray: boolean;
+  covered: boolean;
+  fullname: () => string;
   build: () => void;
   test: () => void;
   validate: (value: any, data: any, reqData: any) => void;  
@@ -29,13 +31,18 @@ export interface IParam {
   hasRule: (key: string) => boolean;
   childNames: () => Array<string>;
   childParams: () => Array<IParam>;
+  allChildParams: () => Array<IParam>;
   hasChildren: () => boolean;
   getChild: (key: string) => IParam;
+  clearCoverage: () => void;
+  coverage: () => number;
+  uncoveredParamNames: () => Array<string>;
 }
 
 export class Param implements IParam {
   private _type: string;
   private _isArray: boolean = false;
+  private _covered: boolean = false;
   private children: { [key: string]: IParam } = null;
   private tempRules: { [key: string]: any } = {};
   private rules: Array<Rule> = [];
@@ -48,6 +55,12 @@ export class Param implements IParam {
   public get name() { return this._name; }
   public get type() { return this._type; }
   public get isArray() { return this._isArray; }
+  public get covered() { return this._covered; }
+
+  public clearCoverage() {
+    this._covered = false;
+    this.childParams().forEach(child => child.clearCoverage());
+  }
 
   public test() {
     function testDataType() {
@@ -98,7 +111,10 @@ export class Param implements IParam {
     }
   }
 
-  public validate(value: any, data: any, reqData: any) {
+  public validate(value: any, data: any, reqData?: any) {
+    if (value) {
+      this._covered = true;
+    }
     let target = [value];
     if (value && this.isArray) {
       if (!Array.isArray(value)) {
@@ -153,7 +169,7 @@ export class Param implements IParam {
     return this.children ? Object.keys(this.children) : [];
   }
 
-  public childParams() {
+  public childParams(): Array<IParam> {
     return this.childNames().map(key => {
       return this.children[key];
     });
@@ -161,6 +177,32 @@ export class Param implements IParam {
 
   public getChild(name: string) {
     return this.children ? this.children[name] : null;
+  }
+
+  public allChildParams(): Array<IParam> {
+    let result: Array<IParam> = [];
+    this.childParams().forEach(child => {
+      result.push(child);
+      result = result.concat(child.allChildParams());
+    });
+    return result;
+  }
+
+  public coverage(): number {
+    const uncovered = this.uncoveredParamNames();
+    if (uncovered.length === 0) {
+      return 1;
+    }
+    const all = this.allChildParams();
+    return (all.length - uncovered.length) / all.length;
+  }
+
+  public uncoveredParamNames(): Array<string> {
+    return this.allChildParams().filter(v => !v.covered).map(v => v.fullname());
+  }
+
+  public fullname() {
+    return this.prefix ? this.prefix + this.name : this.name;
   }
 
   protected createChild(name: string, value: any) {
@@ -193,10 +235,6 @@ export class Param implements IParam {
         return value === "0" || value === "1";
     }
     return false;
-  }
-
-  private fullname() {
-    return this.prefix ? this.prefix + this.name : this.name;
   }
 
   private init(value: any) {

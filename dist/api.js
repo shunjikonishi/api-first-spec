@@ -163,6 +163,11 @@ class API {
         testRequest(this.request);
         testResponse(this.response);
     }
+    testCoverage() {
+        if (this.request && this.request.params && this.request.params.coverage() !== 1) {
+            throw new Error(`Request parameter ${this.request.params.uncoveredParamNames()} are not covered.`);
+        }
+    }
     init(config) {
         this._name = config.name || config.endpoint;
         this._endpoint = config.endpoint;

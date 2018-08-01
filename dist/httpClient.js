@@ -44,54 +44,54 @@ class HttpClient {
         this._headers = v;
         return this;
     }
-    success(callback) {
+    success(callback, validateInput = true) {
         return this.doTest(result => {
             if (!this._api.isSuccess(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Success.\n${this.stringify(result.data)}`);
             }
             this._api.validateResponse(result.data, result.res, result.params);
             this.done(callback, result);
-        }).then(result => result.data);
+        }, validateInput).then(result => result.data);
     }
-    badRequest(callback) {
+    badRequest(callback, validateInput = true) {
         return this.doTest(result => {
             if (!this._api.isBadRequest(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't BadRequest.\n${this.stringify(result.data)}`);
             }
             this.done(callback, result);
-        }).then(result => result.data);
+        }, validateInput).then(result => result.data);
     }
-    notFound(callback) {
+    notFound(callback, validateInput = true) {
         return this.doTest(result => {
             if (!this._api.isNotFound(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't NotFound.\n${this.stringify(result.data)}`);
             }
             this.done(callback, result);
-        }).then(result => result.data);
+        }, validateInput).then(result => result.data);
     }
-    unauthorized(callback) {
+    unauthorized(callback, validateInput = true) {
         return this.doTest(result => {
             if (!this._api.isUnauthorized(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Unauthorized.\n${this.stringify(result.data)}`);
             }
             this.done(callback, result);
-        }).then(result => result.data);
+        }, validateInput).then(result => result.data);
     }
-    forbidden(callback) {
+    forbidden(callback, validateInput = true) {
         return this.doTest(result => {
             if (!this._api.isForbidden(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Forbidden.\n${this.stringify(result.data)}`);
             }
             this.done(callback, result);
-        }).then(result => result.data);
+        }, validateInput).then(result => result.data);
     }
-    clientError(callback) {
+    clientError(callback, validateInput = true) {
         return this.doTest(result => {
             if (!this._api.isClientError(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't ClientError.\n${this.stringify(result.data)}`);
             }
             this.done(callback, result);
-        }).then(result => result.data);
+        }, validateInput).then(result => result.data);
     }
     normalizeData(params) {
         function getValue(v) {
@@ -170,7 +170,7 @@ class HttpClient {
         }
         return "" + data;
     }
-    doTest(callback) {
+    doTest(callback, validateInput = true) {
         const self = this;
         return new Promise((resolve, reject) => {
             function isJson(contentType) {
@@ -208,28 +208,76 @@ class HttpClient {
                 callback(ret);
                 resolve(ret);
             }
+            function getParamsForValidation() {
+                const result = Object.assign({}, currentParams);
+                if (currentApi.urlParams) {
+                    currentApi.urlParams.forEach(key => {
+                        delete result[key];
+                    });
+                }
+                return normalize(result);
+            }
+            // Expand parameters which contains `.` for GET. e.g. `sortOrder.column`
+            function normalize(params) {
+                if (!params || typeof (params) !== "object") {
+                    return params;
+                }
+                const newResult = {};
+                Object.keys(params).filter(key => key.indexOf(".") === -1).forEach(key => {
+                    newResult[key] = params[key];
+                });
+                Object.keys(params).filter(key => key.indexOf(".") !== -1).forEach(key => {
+                    const array = key.split(".");
+                    const parentKey = array.shift();
+                    const childKey = array.join(".");
+                    if (newResult[parentKey]) {
+                        newResult[parentKey][childKey] = params[key];
+                    }
+                    else {
+                        const newChild = {
+                            [childKey]: params[key]
+                        };
+                        newResult[parentKey] = newChild;
+                    }
+                });
+                Object.keys(newResult).filter(key => typeof (newResult[key]) === "object" && !Array.isArray(newResult[key])).forEach(key => {
+                    newResult[key] = normalize(newResult[key]);
+                });
+                return newResult;
+            }
             const currentApi = self._api;
             const currentParams = Object.assign({}, self.defaults.params, self._params);
             const currentHeaders = Object.assign({}, self.defaults.headers, self._headers);
-            self._params = null;
-            self._headers = null;
-            if (!currentApi) {
-                reject("api isn't set.");
+            try {
+                self._params = null;
+                self._headers = null;
+                if (!currentApi) {
+                    throw new Error("api isn't set.");
+                }
+                if (validateInput && currentApi.request.params && currentApi.request.params.hasChildren()) {
+                    const paramsForValidation = getParamsForValidation();
+                    currentApi.request.params.validate(paramsForValidation, paramsForValidation, null);
+                }
+                const requestParams = {
+                    method: currentApi.method,
+                    headers: currentHeaders,
+                    path: buildEndpoint(),
+                    data: Object.keys(currentParams).length > 0 ? currentParams : null,
+                    log: currentApi.verbose()
+                };
+                if (currentApi.request && currentApi.request.headers) {
+                    Object.assign(requestParams.headers, currentApi.request.headers);
+                }
+                if (currentApi.request && currentApi.request.contentType) {
+                    requestParams.headers["Content-Type"] = currentApi.request.contentType;
+                }
+                self.doRequest(requestParams, doCallback);
             }
-            const requestParams = {
-                method: currentApi.method,
-                headers: currentHeaders,
-                path: buildEndpoint(),
-                data: Object.keys(currentParams).length > 0 ? currentParams : null,
-                log: currentApi.verbose()
-            };
-            if (currentApi.request && currentApi.request.headers) {
-                Object.assign(requestParams.headers, currentApi.request.headers);
+            catch (e) {
+                setTimeout(() => {
+                    throw e;
+                }, 0);
             }
-            if (currentApi.request && currentApi.request.contentType) {
-                requestParams.headers["Content-Type"] = currentApi.request.contentType;
-            }
-            self.doRequest(requestParams, doCallback);
         });
     }
     doRequest(config, callback) {

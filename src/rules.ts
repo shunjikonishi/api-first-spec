@@ -149,7 +149,7 @@ export class Rule {
   public get name() { return this._name; }
   public get param() { return this._param; }
 
-  public validate(value: any, data: any, reqData: any): boolean {
+  public validate(value: any, data: any, reqData?: any): boolean {
     let ruleParam = this.param;
     if (typeof(ruleParam) === "function") {
       ruleParam = ruleParam(data, reqData);

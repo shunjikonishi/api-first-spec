@@ -24,6 +24,7 @@ class Param {
         this._name = _name;
         this.prefix = prefix;
         this._isArray = false;
+        this._covered = false;
         this.children = null;
         this.tempRules = {};
         this.rules = [];
@@ -33,6 +34,11 @@ class Param {
     get name() { return this._name; }
     get type() { return this._type; }
     get isArray() { return this._isArray; }
+    get covered() { return this._covered; }
+    clearCoverage() {
+        this._covered = false;
+        this.childParams().forEach(child => child.clearCoverage());
+    }
     test() {
         function testDataType() {
             if (type === "object" || type === "array") {
@@ -82,6 +88,9 @@ class Param {
         }
     }
     validate(value, data, reqData) {
+        if (value) {
+            this._covered = true;
+        }
         let target = [value];
         if (value && this.isArray) {
             if (!Array.isArray(value)) {
@@ -141,6 +150,28 @@ class Param {
     getChild(name) {
         return this.children ? this.children[name] : null;
     }
+    allChildParams() {
+        let result = [];
+        this.childParams().forEach(child => {
+            result.push(child);
+            result = result.concat(child.allChildParams());
+        });
+        return result;
+    }
+    coverage() {
+        const uncovered = this.uncoveredParamNames();
+        if (uncovered.length === 0) {
+            return 1;
+        }
+        const all = this.allChildParams();
+        return (all.length - uncovered.length) / all.length;
+    }
+    uncoveredParamNames() {
+        return this.allChildParams().filter(v => !v.covered).map(v => v.fullname());
+    }
+    fullname() {
+        return this.prefix ? this.prefix + this.name : this.name;
+    }
     createChild(name, value) {
         const nextPrefix = this.fullname() + ".";
         return new Param(name, value, nextPrefix);
@@ -170,9 +201,6 @@ class Param {
                 return value === "0" || value === "1";
         }
         return false;
-    }
-    fullname() {
-        return this.prefix ? this.prefix + this.name : this.name;
     }
     init(value) {
         if (typeof (value) === "string") {

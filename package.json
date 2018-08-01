@@ -42,20 +42,20 @@
   },
   "homepage": "https://github.com/shunjikonishi/api-first-spec",
   "devDependencies": {
-    "chai": "^4.1.2",
-    "mocha": "^5.2.0",
-    "npm-watch": "^0.3.0"
-  },
-  "dependencies": {
     "@types/node": "^10.5.2",
     "@types/request": "^2.47.1",
     "@types/validator": "^9.4.1",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "tslint": "^5.11.0",
+    "typescript": "^2.9.2",
+    "npm-watch": "^0.3.0"
+  },
+  "dependencies": {
     "email-validator": "^2.0.4",
     "extend": "^3.0.2",
     "moment": "^2.22.2",
     "request": "^2.87.0",
-    "tslint": "^5.11.0",
-    "typescript": "^2.9.2",
     "validator": "^10.4.0"
   }
 }

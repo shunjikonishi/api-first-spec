@@ -180,6 +180,12 @@ export class API {
     testResponse(this.response);
   }
 
+  public testCoverage() {
+    if (this.request && this.request.params && this.request.params.coverage() !== 1) {
+      throw new Error(`Request parameter ${this.request.params.uncoveredParamNames()} are not covered.`);
+    }
+  }
+
   private init(config: ApiConfig) {
     this._name = config.name || config.endpoint;
     this._endpoint = config.endpoint;
