@@ -105,7 +105,7 @@ class API {
     }
     test() {
         function testContentType(value) {
-            if (!Object.values(ContentType).find((v) => v === value)) {
+            if (!Object.keys(ContentType).find((key) => ContentType[key] === value)) {
                 throw new Error("Invalid ContentType: " + value);
             }
         }
@@ -121,7 +121,7 @@ class API {
             if (!value) {
                 throw new Error("method is not defined");
             }
-            if (!Object.values(Method).find((v) => v === value)) {
+            if (!Object.keys(Method).find((key) => Method[key] === value)) {
                 throw new Error("Invalid method: " + value);
             }
         }
