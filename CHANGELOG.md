@@ -69,3 +69,11 @@
 ## 1.0.2(2018-03-27)
 - Bugfix of array handling in mutlipart/form-data
 - Add text/csv to ContentType
+
+## 2.0.1(2018-08-02)
+- Completely rewrite with TypeScript
+- Reduce test output 
+- Remove unused features
+- Add input parameter validation
+- Add testCoverage method
+
