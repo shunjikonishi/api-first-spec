@@ -285,8 +285,7 @@ GETやPOSTに付加するパラメータを設定します。
 - Return:
   - this
 
-GETやPOSTに付加するパラメータを設定します。
-また、URLパラメータ(endpointが`/users/[userId]`のように定義されている場合の`userId`)もここで指定します。
+HTTPリクエストに付加するHTTPヘッダを指定します。
 返り値は自分自身なのでメソッドチェーンできます。
 
 ### success(callback?: (data?: any, res?: Request.Response, req?: Request.Request) => void, validateInput: boolean = true): Promise<any>
