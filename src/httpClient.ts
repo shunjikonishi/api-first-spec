@@ -121,6 +121,14 @@ export class HttpClient {
     }, validateInput).then(result => result.data);
   }
 
+  public setDefaultHeaders(headers: { [key: string]: string}) {
+    this.defaults.headers = headers;
+  }
+
+  public setDefaultParams(params: { [key: string]: string}) {
+    this.defaults.params = params;
+  }
+
   private normalizeData(params: any): any {
     function getValue(v: any) {
       if (typeof(v) === "function") {

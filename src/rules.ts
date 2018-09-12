@@ -114,7 +114,9 @@ const Rules: IRules = {
         if (isNullOrUndefined(value) || !param) {
           return true;
         }
-        return Validator.isURL(String(value));
+        return Validator.isURL(String(value), {
+          require_tld: false
+        });
       };
     },
     message: "[NAME] must be valid url format."

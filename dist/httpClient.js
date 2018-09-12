@@ -93,6 +93,12 @@ class HttpClient {
             this.done(callback, result);
         }, validateInput).then(result => result.data);
     }
+    setDefaultHeaders(headers) {
+        this.defaults.headers = headers;
+    }
+    setDefaultParams(params) {
+        this.defaults.params = params;
+    }
     normalizeData(params) {
         function getValue(v) {
             if (typeof (v) === "function") {
