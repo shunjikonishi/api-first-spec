@@ -66,59 +66,59 @@ export class HttpClient {
     return this;
   }
 
-  public success(callback: (data?: any, res?: Request.Response, req?: Request.Request) => void, validateInput: boolean = true) {
+  public success(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = true) {
     return this.doTest(result => {
       if (!this._api.isSuccess(result.data, result.res)) {
         throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Success.\n${this.stringify(result.data)}`);
       }
       this._api.validateResponse(result.data, result.res, result.params);
-      this.done(callback, result);
-    }, validateInput).then(result => result.data);
+      return this.done(callback, result);
+    }, validateInput);
   }
 
-  public badRequest(callback: (data?: any, res?: Request.Response, req?: Request.Request) => void, validateInput: boolean = true) {
+  public badRequest(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = true) {
     return this.doTest(result => {
       if (!this._api.isBadRequest(result.data, result.res)) {
         throw new Error(`StatusCode=${result.res.statusCode}. Response isn't BadRequest.\n${this.stringify(result.data)}`);
       }
-      this.done(callback, result);
-    }, validateInput).then(result => result.data);
+      return this.done(callback, result);
+    }, validateInput);
   }
 
-  public notFound(callback: (data?: any, res?: Request.Response, req?: Request.Request) => void, validateInput: boolean = true) {
+  public notFound(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = true) {
     return this.doTest(result => {
       if (!this._api.isNotFound(result.data, result.res)) {
         throw new Error(`StatusCode=${result.res.statusCode}. Response isn't NotFound.\n${this.stringify(result.data)}`);
       }
-      this.done(callback, result);
-    }, validateInput).then(result => result.data);
+      return this.done(callback, result);
+    }, validateInput);
   }
 
-  public unauthorized(callback: (data?: any, res?: Request.Response, req?: Request.Request) => void, validateInput: boolean = true) {
+  public unauthorized(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = true) {
     return this.doTest(result => {
       if (!this._api.isUnauthorized(result.data, result.res)) {
         throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Unauthorized.\n${this.stringify(result.data)}`);
       }
-      this.done(callback, result);
-    }, validateInput).then(result => result.data);
+      return this.done(callback, result);
+    }, validateInput);
   }
 
-  public forbidden(callback: (data?: any, res?: Request.Response, req?: Request.Request) => void, validateInput: boolean = true) {
+  public forbidden(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = true) {
     return this.doTest(result => {
       if (!this._api.isForbidden(result.data, result.res)) {
         throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Forbidden.\n${this.stringify(result.data)}`);
       }
-      this.done(callback, result);
-    }, validateInput).then(result => result.data);
+      return this.done(callback, result);
+    }, validateInput);
   }
   
-  public clientError(callback: (data?: any, res?: Request.Response, req?: Request.Request) => void, validateInput: boolean = true) {
+  public clientError(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = true) {
     return this.doTest(result => {
       if (!this._api.isClientError(result.data, result.res)) {
         throw new Error(`StatusCode=${result.res.statusCode}. Response isn't ClientError.\n${this.stringify(result.data)}`);
       }
-      this.done(callback, result);
-    }, validateInput).then(result => result.data);
+      return this.done(callback, result);
+    }, validateInput);
   }
 
   public setDefaultHeaders(headers: { [key: string]: string}) {
@@ -187,7 +187,7 @@ export class HttpClient {
     return JSON.stringify(params);
   }
 
-  private done(callback: (data?: any, res?: Request.Response, req?: Request.Request) => void, result: IHttpResult) {
+  private done(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, result: IHttpResult) {
     function isDone() {
       return callback.toString().indexOf("done() invoked with non-Error") !== -1;
     }
@@ -195,9 +195,9 @@ export class HttpClient {
       return;
     }
     if (isDone()) {
-      callback();
+      return callback();
     } else {
-      callback(result.data, result.res, result.req);
+      return callback(result.data, result.res, result.req);
     }
   }
   private stringify(data: any) {
@@ -207,7 +207,7 @@ export class HttpClient {
     return "" + data;
   }
 
-  private doTest(callback: (ret: IHttpResult) => void, validateInput: boolean = true): Promise<IHttpResult> {
+  private doTest(callback: (ret: IHttpResult) => void, validateInput: boolean = true): Promise<any> {
     const self = this;
     return new Promise((resolve, reject) => {
       function isJson(contentType: string) {
@@ -241,8 +241,8 @@ export class HttpClient {
         if (isJson(ct)) {
           ret.data = JSON.parse(ret.data);
         }
-        callback(ret);
-        resolve(ret);
+        const ret2 = callback(ret);
+        resolve(ret2 ? ret2 : ret.data);
       }
       function getParamsForValidation(): any {
         const result = Object.assign({}, currentParams);

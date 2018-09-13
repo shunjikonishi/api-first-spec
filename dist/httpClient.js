@@ -50,48 +50,48 @@ class HttpClient {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Success.\n${this.stringify(result.data)}`);
             }
             this._api.validateResponse(result.data, result.res, result.params);
-            this.done(callback, result);
-        }, validateInput).then(result => result.data);
+            return this.done(callback, result);
+        }, validateInput);
     }
     badRequest(callback, validateInput = true) {
         return this.doTest(result => {
             if (!this._api.isBadRequest(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't BadRequest.\n${this.stringify(result.data)}`);
             }
-            this.done(callback, result);
-        }, validateInput).then(result => result.data);
+            return this.done(callback, result);
+        }, validateInput);
     }
     notFound(callback, validateInput = true) {
         return this.doTest(result => {
             if (!this._api.isNotFound(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't NotFound.\n${this.stringify(result.data)}`);
             }
-            this.done(callback, result);
-        }, validateInput).then(result => result.data);
+            return this.done(callback, result);
+        }, validateInput);
     }
     unauthorized(callback, validateInput = true) {
         return this.doTest(result => {
             if (!this._api.isUnauthorized(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Unauthorized.\n${this.stringify(result.data)}`);
             }
-            this.done(callback, result);
-        }, validateInput).then(result => result.data);
+            return this.done(callback, result);
+        }, validateInput);
     }
     forbidden(callback, validateInput = true) {
         return this.doTest(result => {
             if (!this._api.isForbidden(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Forbidden.\n${this.stringify(result.data)}`);
             }
-            this.done(callback, result);
-        }, validateInput).then(result => result.data);
+            return this.done(callback, result);
+        }, validateInput);
     }
     clientError(callback, validateInput = true) {
         return this.doTest(result => {
             if (!this._api.isClientError(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't ClientError.\n${this.stringify(result.data)}`);
             }
-            this.done(callback, result);
-        }, validateInput).then(result => result.data);
+            return this.done(callback, result);
+        }, validateInput);
     }
     setDefaultHeaders(headers) {
         this.defaults.headers = headers;
@@ -164,10 +164,10 @@ class HttpClient {
             return;
         }
         if (isDone()) {
-            callback();
+            return callback();
         }
         else {
-            callback(result.data, result.res, result.req);
+            return callback(result.data, result.res, result.req);
         }
     }
     stringify(data) {
@@ -211,8 +211,8 @@ class HttpClient {
                 if (isJson(ct)) {
                     ret.data = JSON.parse(ret.data);
                 }
-                callback(ret);
-                resolve(ret);
+                const ret2 = callback(ret);
+                resolve(ret2 ? ret2 : ret.data);
             }
             function getParamsForValidation() {
                 const result = Object.assign({}, currentParams);
