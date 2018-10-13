@@ -121,6 +121,10 @@ export class HttpClient {
     }, validateInput);
   }
 
+  public execute(): Promise<IHttpResult> {
+    return this.doTest(null, false);
+  }
+
   public setDefaultHeaders(headers: { [key: string]: string}) {
     this.defaults.headers = headers;
   }

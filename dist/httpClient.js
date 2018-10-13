@@ -93,6 +93,9 @@ class HttpClient {
             return this.done(callback, result);
         }, validateInput);
     }
+    execute() {
+        return this.doTest(null, false);
+    }
     setDefaultHeaders(headers) {
         this.defaults.headers = headers;
     }
