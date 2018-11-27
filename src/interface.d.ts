@@ -19,3 +19,9 @@ interface ResponseConfig {
   data: any;
   rules: any;
 }
+
+interface HttpClientConfig {
+  host: string
+  ssl: boolean
+  validateRequest: boolean
+}
