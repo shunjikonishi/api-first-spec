@@ -24,8 +24,18 @@ class ApiFirstSpec {
         }
         return api;
     }
-    host(hostName, ssl, defaults) {
-        return new httpClient_1.HttpClient(hostName, ssl, defaults);
+    host(arg1, arg2, arg3) {
+        if (typeof arg1 === "string") {
+            const config = {
+                host: arg1,
+                ssl: arg2,
+                validateRequest: true
+            };
+            return new httpClient_1.HttpClient(config, arg3);
+        }
+        else {
+            return new httpClient_1.HttpClient(arg1, arg2);
+        }
     }
     skipTest(v) {
         if (typeof v === "boolean") {

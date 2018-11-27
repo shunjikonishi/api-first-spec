@@ -16,9 +16,8 @@ const Request = require("request");
  * @return {object}
  */
 class HttpClient {
-    constructor(host, ssl, defaults = {}) {
-        this.host = host;
-        this.ssl = ssl;
+    constructor(config, defaults = {}) {
+        this.config = config;
         this.defaults = defaults;
         this._api = null;
         this._params = null;
@@ -44,7 +43,7 @@ class HttpClient {
         this._headers = v;
         return this;
     }
-    success(callback, validateInput = true) {
+    success(callback, validateInput = this.config.validateRequest) {
         return this.doTest(result => {
             if (!this._api.isSuccess(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Success.\n${this.stringify(result.data)}`);
@@ -53,7 +52,7 @@ class HttpClient {
             return this.done(callback, result);
         }, validateInput);
     }
-    badRequest(callback, validateInput = true) {
+    badRequest(callback, validateInput = this.config.validateRequest) {
         return this.doTest(result => {
             if (!this._api.isBadRequest(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't BadRequest.\n${this.stringify(result.data)}`);
@@ -61,7 +60,7 @@ class HttpClient {
             return this.done(callback, result);
         }, validateInput);
     }
-    notFound(callback, validateInput = true) {
+    notFound(callback, validateInput = this.config.validateRequest) {
         return this.doTest(result => {
             if (!this._api.isNotFound(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't NotFound.\n${this.stringify(result.data)}`);
@@ -69,7 +68,7 @@ class HttpClient {
             return this.done(callback, result);
         }, validateInput);
     }
-    unauthorized(callback, validateInput = true) {
+    unauthorized(callback, validateInput = this.config.validateRequest) {
         return this.doTest(result => {
             if (!this._api.isUnauthorized(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Unauthorized.\n${this.stringify(result.data)}`);
@@ -77,7 +76,7 @@ class HttpClient {
             return this.done(callback, result);
         }, validateInput);
     }
-    forbidden(callback, validateInput = true) {
+    forbidden(callback, validateInput = this.config.validateRequest) {
         return this.doTest(result => {
             if (!this._api.isForbidden(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Forbidden.\n${this.stringify(result.data)}`);
@@ -85,7 +84,7 @@ class HttpClient {
             return this.done(callback, result);
         }, validateInput);
     }
-    clientError(callback, validateInput = true) {
+    clientError(callback, validateInput = this.config.validateRequest) {
         return this.doTest(result => {
             if (!this._api.isClientError(result.data, result.res)) {
                 throw new Error(`StatusCode=${result.res.statusCode}. Response isn't ClientError.\n${this.stringify(result.data)}`);
@@ -179,7 +178,7 @@ class HttpClient {
         }
         return "" + data;
     }
-    doTest(callback, validateInput = true) {
+    doTest(callback, validateInput = this.config.validateRequest) {
         const self = this;
         return new Promise((resolve, reject) => {
             function isJson(contentType) {
@@ -196,7 +195,7 @@ class HttpClient {
                         delete currentParams[key];
                     });
                 }
-                return (self.ssl ? "https" : "http") + "://" + self.host + ret;
+                return (self.config.ssl ? "https" : "http") + "://" + self.config.host + ret;
             }
             function doCallback(ret) {
                 if (currentApi.verbose()) {
@@ -346,7 +345,7 @@ class HttpClient {
         });
     }
     copy() {
-        const ret = new HttpClient(this.host, this.ssl, this.defaults);
+        const ret = new HttpClient(this.config, this.defaults);
         ret.assign(this.cookieJar, this._api, this._params, this._headers);
         return ret;
     }

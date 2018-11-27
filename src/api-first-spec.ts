@@ -26,8 +26,19 @@ class ApiFirstSpec {
     return api;
   }
 
-  public host(hostName: string, ssl: boolean, defaults: IDefaultParameters) {
-    return new HttpClient(hostName, ssl, defaults);
+  public host(hostName: string, ssl: boolean, defaults: IDefaultParameters): HttpClient;
+  public host(config: HttpClientConfig, defaults: IDefaultParameters): HttpClient;
+  public host(arg1: HttpClientConfig | string, arg2: any, arg3?: IDefaultParameters) {
+    if (typeof arg1 === "string") {
+      const config: HttpClientConfig = {
+        host: arg1,
+        ssl: arg2,
+        validateRequest: true
+      };
+      return new HttpClient(config, arg3);
+    } else {
+      return new HttpClient(arg1, arg2);
+    }
   }
 
   public skipTest(v?: boolean) {

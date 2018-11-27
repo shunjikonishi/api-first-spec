@@ -40,7 +40,7 @@ export class HttpClient {
   private _params: any = null;
   private _headers: any = null;
 
-  constructor(private host: string, private ssl: boolean, private defaults: IDefaultParameters = {}) {
+  constructor(private config: HttpClientConfig, private defaults: IDefaultParameters = {}) {
     this.cookieJar = Request.jar();
     this.request = Request.defaults({ jar: this.cookieJar});
     if (!defaults.headers) {
@@ -66,7 +66,7 @@ export class HttpClient {
     return this;
   }
 
-  public success(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = true) {
+  public success(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = this.config.validateRequest) {
     return this.doTest(result => {
       if (!this._api.isSuccess(result.data, result.res)) {
         throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Success.\n${this.stringify(result.data)}`);
@@ -76,7 +76,7 @@ export class HttpClient {
     }, validateInput);
   }
 
-  public badRequest(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = true) {
+  public badRequest(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = this.config.validateRequest) {
     return this.doTest(result => {
       if (!this._api.isBadRequest(result.data, result.res)) {
         throw new Error(`StatusCode=${result.res.statusCode}. Response isn't BadRequest.\n${this.stringify(result.data)}`);
@@ -85,7 +85,7 @@ export class HttpClient {
     }, validateInput);
   }
 
-  public notFound(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = true) {
+  public notFound(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = this.config.validateRequest) {
     return this.doTest(result => {
       if (!this._api.isNotFound(result.data, result.res)) {
         throw new Error(`StatusCode=${result.res.statusCode}. Response isn't NotFound.\n${this.stringify(result.data)}`);
@@ -94,7 +94,7 @@ export class HttpClient {
     }, validateInput);
   }
 
-  public unauthorized(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = true) {
+  public unauthorized(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = this.config.validateRequest) {
     return this.doTest(result => {
       if (!this._api.isUnauthorized(result.data, result.res)) {
         throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Unauthorized.\n${this.stringify(result.data)}`);
@@ -103,7 +103,7 @@ export class HttpClient {
     }, validateInput);
   }
 
-  public forbidden(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = true) {
+  public forbidden(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = this.config.validateRequest) {
     return this.doTest(result => {
       if (!this._api.isForbidden(result.data, result.res)) {
         throw new Error(`StatusCode=${result.res.statusCode}. Response isn't Forbidden.\n${this.stringify(result.data)}`);
@@ -112,7 +112,7 @@ export class HttpClient {
     }, validateInput);
   }
   
-  public clientError(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = true) {
+  public clientError(callback: (data?: any, res?: Request.Response, req?: Request.Request) => any, validateInput: boolean = this.config.validateRequest) {
     return this.doTest(result => {
       if (!this._api.isClientError(result.data, result.res)) {
         throw new Error(`StatusCode=${result.res.statusCode}. Response isn't ClientError.\n${this.stringify(result.data)}`);
@@ -211,7 +211,7 @@ export class HttpClient {
     return "" + data;
   }
 
-  private doTest(callback: (ret: IHttpResult) => void, validateInput: boolean = true): Promise<any> {
+  private doTest(callback: (ret: IHttpResult) => void, validateInput: boolean = this.config.validateRequest): Promise<any> {
     const self = this;
     return new Promise((resolve, reject) => {
       function isJson(contentType: string) {
@@ -227,7 +227,7 @@ export class HttpClient {
             delete currentParams[key];
           });
         }
-        return (self.ssl ? "https" : "http") + "://" + self.host + ret;
+        return (self.config.ssl ? "https" : "http") + "://" + self.config.host + ret;
       }
       function doCallback(ret: IHttpResult) {
         if (currentApi.verbose()) {
@@ -373,7 +373,7 @@ export class HttpClient {
     });
   }
   private copy() {
-    const ret = new HttpClient(this.host, this.ssl, this.defaults);
+    const ret = new HttpClient(this.config, this.defaults);
     ret.assign(this.cookieJar, this._api, this._params, this._headers);
     return ret;
   }
