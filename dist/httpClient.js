@@ -289,11 +289,11 @@ class HttpClient {
         });
     }
     doRequest(config, callback) {
-        const requestOptions = {
+        const requestOptions = Object.assign({
             method: config.method,
             headers: config.headers || {},
             url: config.path
-        };
+        }, this.config.requestOptions || {});
         if (config.method === "GET" && config.data) {
             requestOptions.qs = config.data;
         }

@@ -21,7 +21,8 @@ interface ResponseConfig {
 }
 
 interface HttpClientConfig {
-  host: string
-  ssl: boolean
-  validateRequest: boolean
+  host?: string;
+  ssl?: boolean;
+  validateRequest?: boolean;
+  requestOptions?: any;
 }

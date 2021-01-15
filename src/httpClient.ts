@@ -320,11 +320,11 @@ export class HttpClient {
   }
 
   private doRequest(config: IRequestParams, callback: (ret: IHttpResult) => void) {
-    const requestOptions: any = {
+    const requestOptions: any = Object.assign({
       method: config.method,
       headers: config.headers || {},
       url: config.path
-    };
+    }, this.config.requestOptions || {});
 
     if (config.method === "GET" && config.data) {
       requestOptions.qs = config.data;

@@ -77,3 +77,6 @@
 - Add input parameter validation
 - Add testCoverage method
 
+## 2.0.6(2021-01-16)
+- Support rails style arrayFormat
+  - See. https://github.com/ljharb/qs#stringifying
